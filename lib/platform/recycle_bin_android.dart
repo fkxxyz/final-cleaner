@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:flutter/foundation.dart';
 import 'recycle_bin.dart';
 
 class RecycleBinAndroid implements RecycleBin {
@@ -18,7 +18,8 @@ class RecycleBinAndroid implements RecycleBin {
         await File(path).delete();
       }
       return true;
-    } catch (_) {
+    } catch (e) {
+      debugPrint('Failed to delete $path: $e');
       return false;
     }
   }

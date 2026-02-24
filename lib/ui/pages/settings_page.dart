@@ -571,9 +571,13 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           if (action == null) return; // User cancelled
           shouldReplace = action == 'replace';
         }
+        final filePath = result.files.single.path;
+        if (filePath == null) {
+          throw Exception('File path is null');
+        }
         await ref
             .read(exportImportServiceProvider)
-            .importFromFile(result.files.single.path!, replace: shouldReplace);
+            .importFromFile(filePath, replace: shouldReplace);
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

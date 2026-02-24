@@ -180,7 +180,14 @@ class ExportImportService {
   }
 
   Future<void> importFromFile(String filePath, {bool replace = false}) async {
-    final json = await File(filePath).readAsString();
-    await importFromJson(json, replace: replace);
-  }
+    try {
+      final json = await File(filePath).readAsString();
+      await importFromJson(json, replace: replace);
+    } on FileSystemException catch (e) {
+      throw Exception('Failed to read import file: ${e.message}');
+    } on IOException catch (e) {
+      throw Exception('Failed to read import file: $e');
+    } on FormatException catch (e) {
+      throw Exception('Invalid JSON format: ${e.message}');
+    }
 }

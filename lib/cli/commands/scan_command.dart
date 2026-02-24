@@ -1,5 +1,5 @@
-import 'dart:async';
-
+import '../../models/directory_node.dart';
+import '../../models/file_node.dart';
 import '../../models/scan_result.dart';
 import '../../services/scan_service.dart';
 import 'cli_command.dart';
@@ -18,18 +18,42 @@ class ScanCommand extends CliCommand {
 
   @override
   Future<void> run() async {
-    final completer = Completer<ScanStatus>();
-    final subscription = _service.statusStream.listen((status) {
-      if (status.state == ScanState.complete) {
-        completer.complete(status);
+    final roots = await _service.scanRoots();
+    final results = _flattenToScanResults(roots);
+    printResult(results);
+  }
+
+  /// Converts DirectoryNode tree to flat list of ScanResult
+  List<ScanResult> _flattenToScanResults(List<DirectoryNode> roots) {
+    final results = <ScanResult>[];
+    
+    void traverse(DirectoryNode node) {
+      // Add all files
+      for (final file in node.files) {
+        results.add(ScanResult(
+          path: file.path,
+          sizeBytes: file.sizeBytes,
+          modifiedAt: file.modifiedAt,
+          isDirectory: false,
+        ));
       }
-    });
-
-    await _service.startScan();
-    final finalStatus = await completer.future;
-    await subscription.cancel();
-
-    printResult(finalStatus.results);
+      
+      // Add folders (as directories)
+      for (final folder in node.folders) {
+        results.add(ScanResult(
+          path: folder.path,
+          sizeBytes: folder.sizeBytes ?? 0,
+          modifiedAt: folder.modifiedAt,
+          isDirectory: true,
+        ));
+      }
+    }
+    
+    for (final root in roots) {
+      traverse(root);
+    }
+    
+    return results;
   }
 
   @override

@@ -1,7 +1,6 @@
 import 'dart:io';
-
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as p;
-
 import 'recycle_bin.dart';
 
 class RecycleBinLinux implements RecycleBin {
@@ -54,7 +53,8 @@ class RecycleBinLinux implements RecycleBin {
       );
 
       return true;
-    } catch (_) {
+    } catch (e) {
+      debugPrint('Failed to move $path to trash: $e');
       return false;
     }
   }

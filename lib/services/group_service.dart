@@ -54,4 +54,10 @@ class GroupService {
       _repo.watchItemsInGroup(groupId);
 
   Future<Group?> getGroupForItem(int itemId) => _repo.getGroupForItem(itemId);
+
+  Future<void> addItemToGroup(int itemId, int groupId) =>
+      _repo.addItemToGroup(itemId, groupId);
+
+  Future<void> removeItemFromGroup(int itemId) =>
+      _repo.removeItemFromGroup(itemId);
 }

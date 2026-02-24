@@ -181,11 +181,12 @@ class _ScanPageState extends ConsumerState<ScanPage> {
     }
     // Check all subfolders
     for (final folder in node.folders) {
-      if (folder.sizeBytes == null) {
+      final folderSize = folder.sizeBytes;
+      if (folderSize == null) {
         // Subfolder not calculable
         return null;
       }
-      totalSize += folder.sizeBytes!;
+      totalSize += folderSize;
     }
     return totalSize;
   }

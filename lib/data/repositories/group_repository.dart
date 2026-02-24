@@ -238,8 +238,18 @@ class GroupRepository {
       _db.whitelistItems,
     )..where((t) => t.id.equals(itemId))).getSingleOrNull();
 
-    if (item == null || item.groupId == null) return null;
+    final groupId = item?.groupId;
+    if (groupId == null) return null;
+    return await getGroupById(groupId);
+  }
 
-    return await getGroupById(item.groupId!);
+  Future<void> addItemToGroup(int itemId, int groupId) async {
+    await (_db.update(_db.whitelistItems)..where((t) => t.id.equals(itemId)))
+        .write(WhitelistItemsCompanion(groupId: Value(groupId)));
+  }
+
+  Future<void> removeItemFromGroup(int itemId) async {
+    await (_db.update(_db.whitelistItems)..where((t) => t.id.equals(itemId)))
+        .write(const WhitelistItemsCompanion(groupId: Value(null)));
   }
 }

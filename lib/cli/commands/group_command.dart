@@ -232,7 +232,7 @@ class _RemoveItemCommand extends CliCommand {
   Future<void> run() async {
     final itemId = requiredIntArg(0, 'item-id');
     final groupId = requiredIntArg(1, 'group-id');
-    await _service.removeItemFromGroup(itemId, groupId);
+    await _service.removeItemFromGroup(itemId);
     printResult({'itemId': itemId, 'groupId': groupId});
   }
 

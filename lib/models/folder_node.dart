@@ -14,8 +14,8 @@ class FolderNode {
   });
 
   String? get formattedSize {
-    if (sizeBytes == null) return null;
-    final size = sizeBytes!;
+    final size = sizeBytes;
+    if (size == null) return null;
     if (size < 1024) {
       return '$size B';
     } else if (size < 1024 * 1024) {
