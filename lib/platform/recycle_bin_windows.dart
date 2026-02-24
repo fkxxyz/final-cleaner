@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'recycle_bin.dart';
+
 class RecycleBinWindows implements RecycleBin {
   @override
   bool get isSupported => true;
@@ -29,6 +30,7 @@ class RecycleBinWindows implements RecycleBin {
       debugPrint('Failed to move $path to recycle bin: $e');
       return false;
     }
+  }
 
   @override
   Future<List<String>> moveMultipleToTrash(List<String> paths) async {
